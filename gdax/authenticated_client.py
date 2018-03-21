@@ -21,6 +21,16 @@ class AuthenticatedClient(PublicClient):
         self.auth = GdaxAuth(key, b64secret, passphrase)
         self.timeout = timeout
 
+    def create_order(self, symbol, side, limit_market, quantity, price):
+        if side == 'sell':
+            response = self.sell(product_id=symbol, size=quantity, price=price, type=limit_market) # FIXME test whether a market order can be completed when price is set.
+        elif side == 'buy':
+            response = self.buy(product_id=symbol, size=quantity, price=price, type=limit_market) # FIXME test whether a market order can be completed when price is set.
+        else:
+            print("Value of Side: " + side + " is not valid, should be buy or sell")
+            # TODO throw exception
+        return response
+
     def get_account(self, account_id):
         r = requests.get(self.url + '/accounts/' + account_id, auth=self.auth, timeout=self.timeout)
         # r.raise_for_status()

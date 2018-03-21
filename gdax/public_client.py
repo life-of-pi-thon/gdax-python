@@ -35,6 +35,20 @@ class PublicClient(object):
         # r.raise_for_status()
         return r.json()
 
+    def get_products_with_prices(self):
+        currencies = self.get_products()
+        symbols = []
+        market_books = {}
+        for currency in currencies:
+            symbol = currency['display_name'].replace('/', '-')
+            symbols.append(symbol)
+            market_book = self.get_product_order_book(symbol)
+            market_books[symbol.replace('-', '')] = {'askPrice': float(market_book['asks'][0][0]),
+                                                     'askQty': float(market_book['asks'][0][1]),
+                                                     'bidPrice': float(market_book['bids'][0][0]),
+                                                     'bidQty': float(market_book['bids'][0][1])}
+        return market_books
+
     def get_products(self):
         """Get a list of available currency pairs for trading.
 
