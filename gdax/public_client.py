@@ -37,6 +37,7 @@ class PublicClient(object):
 
     def get_products_with_prices(self):
         currencies = self.get_products()
+        print('gdax', [currency['display_name'].replace('/', '') for currency in currencies])
         symbols = []
         market_books = {}
         for currency in currencies:
